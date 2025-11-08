@@ -15,10 +15,22 @@ def test_sku_valido(client):
     response = client.post('/', data={'sku': 'RTX-4090'}, follow_redirects=True)
     
     assert response.status_code == 200
-    assert b'SKU: RTX-4090 | Quantidade em Estoque: 150 unidades.' in response.data
+    assert b'SKU: RTX-4090 | Quantidade Total em Estoque: 150 unidades.' in response.data
 
-def test_sku_invalido(client):
-    response = client.post('/', data={'sku': 'SKU-FALSO'}, follow_redirects=True)
+def test_busca_por_serial(client):
+    response = client.post('/', data={
+        'sku': '', 
+        'serial_number': 'SN-C1'
+    }, follow_redirects=True)
     
     assert response.status_code == 200
-    assert b'SKU SKU-FALSO nao encontrado no inventario.' in response.data
+    assert b'SKU: CPU-I9 | Quantidade Total em Estoque: 220 unidades.' in response.data
+
+def test_item_invalido(client):
+    response = client.post('/', data={
+        'sku': 'SKU-FALSO',
+        'serial_number': 'SN-FALSO'
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert b'Item nao encontrado (SKU ou Numero de Serie invalido).' in response.data
