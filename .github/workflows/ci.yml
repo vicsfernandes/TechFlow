@@ -28,4 +28,9 @@ jobs:
     - name: Rodar testes com Pytest
       run: |
         export PYTHONPATH=./src
+        
+        echo "--- LISTANDO ARQUIVOS PARA DEBUG ---"
+        ls -R
+        echo "--- FIM DA LISTAGEM ---"
+        
         pytest tests/
